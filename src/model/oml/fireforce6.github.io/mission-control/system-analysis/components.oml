@@ -133,6 +133,36 @@ description <https://fireforce6.github.io/mission-control/system-analysis/compon
         base:isContainedBy ElectronicsSegment
     ]
 
+    instance EmergencyCommUnit : component:Component [
+        base:description "Emergency backup communication unit for command and telemetry"
+        base:isContainedBy CommunicationSubsystem
+    ]
+
+    instance EmergencyTransceiver : component:Component [
+        base:description "Backup transceiver for emergency command and telemetry"
+        base:isContainedBy EmergencyCommUnit
+    ]
+
+    instance EmergencyAntenna : component:Component [
+        base:description "Dedicated antenna for the emergency communication link"
+        base:isContainedBy EmergencyCommUnit
+    ]
+
+    instance EmergencyLinkController : component:Component [
+        base:description "Controller for emergency communication link management"
+        base:isContainedBy EmergencyCommUnit
+    ]
+
+    instance EmergencyEncryptionModule : component:Component [
+        base:description "Encryption module for emergency command and telemetry data"
+        base:isContainedBy EmergencyCommUnit
+    ]
+
+    instance EmergencyPowerFilter : component:Component [
+        base:description "Power conditioning filter for emergency communication electronics"
+        base:isContainedBy EmergencyCommUnit
+    ]
+
     instance CommUnit : component:Component [
         base:description "S-Band Transceiver"
         base:isContainedBy CommunicationSubsystem

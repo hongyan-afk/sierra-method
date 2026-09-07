@@ -2,7 +2,7 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
 
 	extends <https://fireforce6.github.io/mission-control/system-analysis/components#> as components
 
-	uses <https://www.modelware.io/sierra/component#> as component
+    uses <https://www.modelware.io/sierra/component#> as component
 
     ref instance components:FireSat [
         component:hasPort FireSat.Command_In
@@ -36,9 +36,35 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
     instance Propulsion.Command_In : component:Port [ component:direction "In" ]
     instance Propulsion.Power_In : component:Port [ component:direction "In" ]
 
+    ref instance components:EmergencyCommUnit [
+        component:hasPort EmergencyCommUnit.Command_In
+        component:hasPort EmergencyCommUnit.Telemetry_Out
+    ]
+    instance EmergencyCommUnit.Command_In : component:Port [ component:direction "In" ]
+    instance EmergencyCommUnit.Telemetry_Out : component:Port [ component:direction "Out" ]
+
+    ref instance components:EmergencyTransceiver [
+        component:hasPort EmergencyTransceiver.Command_In
+        component:hasPort EmergencyTransceiver.Telemetry_Out
+    ]
+    instance EmergencyTransceiver.Command_In : component:Port [ component:direction "In" ]
+    instance EmergencyTransceiver.Telemetry_Out : component:Port [ component:direction "Out" ]
+
     instance TelemetrySignal : component:Signal []
     instance CommandSignal : component:Signal []
     instance ElectricalPower : component:Energy []
+
+    relation instance Conn_EmergencyCommUnit_to_TransceiverCmd : component:Connection [
+        from EmergencyCommUnit.Command_In
+        to EmergencyTransceiver.Command_In
+        component:transfers CommandSignal
+    ]
+
+    relation instance Conn_EmergencyTransceiver_to_CommUnitTelem : component:Connection [
+        from EmergencyTransceiver.Telemetry_Out
+        to EmergencyCommUnit.Telemetry_Out
+        component:transfers TelemetrySignal
+    ]
 
     relation instance Conn_FireSatCmd_to_Platform : component:Connection [
         from FireSat.Command_In

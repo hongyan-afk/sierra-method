@@ -61,4 +61,21 @@ description <https://fireforce6.github.io/mission-control/operational-analysis/r
         base:category "L2"
         base:priority "Medium"
     ]
+
+    instance R8 : stakeholder:Requirement [
+        base:description "Emergency Communication Continuity"
+        base:expression "The system shall maintain command and telemetry communication through the emergency communication unit when the primary communication link is unavailable."
+        stakeholder:isStatedBy stakeholders:SystemsEngineer
+        base:category "L2"
+        base:priority "High"
+    ]
+
+    instance R9 : stakeholder:Requirement [
+        base:description "Emergency Link Status Notification"
+        base:expression "The system shall notify operators when the emergency communication link is activated or degraded."
+        stakeholder:isStatedBy stakeholders:SafetyOfficer
+        base:category "L2"
+        base:priority "High"
+    ]
+
 }
