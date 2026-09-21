@@ -2,6 +2,7 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
 
 	extends <https://fireforce6.github.io/mission-control/system-analysis/components#> as components
 
+    uses <https://www.modelware.io/sierra/base#> as base
     uses <https://www.modelware.io/sierra/component#> as component
 
     ref instance components:FireSat [
@@ -49,6 +50,30 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
     ]
     instance EmergencyTransceiver.Command_In : component:Port [ component:direction "In" ]
     instance EmergencyTransceiver.Telemetry_Out : component:Port [ component:direction "Out" ]
+
+    ref instance components:OBC [
+        component:hasPort OBC.Command_In
+    ]
+    instance OBC.Command_In : component:Port [
+        component:direction "In"
+        base:description "Receives command data for onboard processing."
+    ]
+
+    ref instance components:DataStorage [
+        component:hasPort DataStorage.Data_In
+    ]
+    instance DataStorage.Data_In : component:Port [
+        component:direction "In"
+        base:description "Receives mission data for onboard storage."
+    ]
+
+    ref instance components:PayloadProcessor [
+        component:hasPort PayloadProcessor.Data_Out
+    ]
+    instance PayloadProcessor.Data_Out : component:Port [
+        component:direction "Out"
+        base:description "Sends processed payload data to the onboard computer."
+    ]
 
     instance TelemetrySignal : component:Signal []
     instance CommandSignal : component:Signal []
