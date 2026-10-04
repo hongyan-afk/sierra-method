@@ -1,7 +1,5 @@
 description <https://fireforce6.github.io/mission-control/system-analysis/connections#> as connections {
-
-	extends <https://fireforce6.github.io/mission-control/system-analysis/components#> as components
-
+    extends <https://fireforce6.github.io/mission-control/system-analysis/components#> as components
     uses <https://www.modelware.io/sierra/base#> as base
     uses <https://www.modelware.io/sierra/component#> as component
 
@@ -9,15 +7,27 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
         component:hasPort FireSat.Command_In
         component:hasPort FireSat.Telemetry_Out
     ]
-    instance FireSat.Command_In : component:Port [ component:direction "In" ]
-    instance FireSat.Telemetry_Out : component:Port [ component:direction "Out" ]
+
+    instance FireSat.Command_In : component:Port [
+        component:direction "In"
+    ]
+
+    instance FireSat.Telemetry_Out : component:Port [
+        component:direction "Out"
+    ]
 
     ref instance components:Payload [
         component:hasPort Payload.Data_Out
         component:hasPort Payload.Power_In
     ]
-    instance Payload.Data_Out : component:Port [ component:direction "Out" ]
-    instance Payload.Power_In : component:Port [ component:direction "In" ]
+
+    instance Payload.Data_Out : component:Port [
+        component:direction "Out"
+    ]
+
+    instance Payload.Power_In : component:Port [
+        component:direction "In"
+    ]
 
     ref instance components:Platform [
         component:hasPort Platform.Data_In
@@ -25,35 +35,66 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
         component:hasPort Platform.Power_Out
         component:hasPort Platform.Command_In
     ]
-    instance Platform.Data_In : component:Port [ component:direction "In" ]
-    instance Platform.Data_Out : component:Port [ component:direction "Out" ]
-    instance Platform.Power_Out : component:Port [ component:direction "Out" ]
-    instance Platform.Command_In : component:Port [ component:direction "In" ]
+
+    instance Platform.Data_In : component:Port [
+        component:direction "In"
+    ]
+
+    instance Platform.Data_Out : component:Port [
+        component:direction "Out"
+    ]
+
+    instance Platform.Power_Out : component:Port [
+        component:direction "Out"
+    ]
+
+    instance Platform.Command_In : component:Port [
+        component:direction "In"
+    ]
 
     ref instance components:PropulsionSegment [
         component:hasPort Propulsion.Command_In
         component:hasPort Propulsion.Power_In
     ]
-    instance Propulsion.Command_In : component:Port [ component:direction "In" ]
-    instance Propulsion.Power_In : component:Port [ component:direction "In" ]
+
+    instance Propulsion.Command_In : component:Port [
+        component:direction "In"
+    ]
+
+    instance Propulsion.Power_In : component:Port [
+        component:direction "In"
+    ]
 
     ref instance components:EmergencyCommUnit [
         component:hasPort EmergencyCommUnit.Command_In
         component:hasPort EmergencyCommUnit.Telemetry_Out
     ]
-    instance EmergencyCommUnit.Command_In : component:Port [ component:direction "In" ]
-    instance EmergencyCommUnit.Telemetry_Out : component:Port [ component:direction "Out" ]
+
+    instance EmergencyCommUnit.Command_In : component:Port [
+        component:direction "In"
+    ]
+
+    instance EmergencyCommUnit.Telemetry_Out : component:Port [
+        component:direction "Out"
+    ]
 
     ref instance components:EmergencyTransceiver [
         component:hasPort EmergencyTransceiver.Command_In
         component:hasPort EmergencyTransceiver.Telemetry_Out
     ]
-    instance EmergencyTransceiver.Command_In : component:Port [ component:direction "In" ]
-    instance EmergencyTransceiver.Telemetry_Out : component:Port [ component:direction "Out" ]
+
+    instance EmergencyTransceiver.Command_In : component:Port [
+        component:direction "In"
+    ]
+
+    instance EmergencyTransceiver.Telemetry_Out : component:Port [
+        component:direction "Out"
+    ]
 
     ref instance components:OBC [
         component:hasPort OBC.Command_In
     ]
+
     instance OBC.Command_In : component:Port [
         component:direction "In"
         base:description "Receives command data for onboard processing."
@@ -62,6 +103,7 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
     ref instance components:DataStorage [
         component:hasPort DataStorage.Data_In
     ]
+
     instance DataStorage.Data_In : component:Port [
         component:direction "In"
         base:description "Receives mission data for onboard storage."
@@ -70,14 +112,17 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
     ref instance components:PayloadProcessor [
         component:hasPort PayloadProcessor.Data_Out
     ]
+
     instance PayloadProcessor.Data_Out : component:Port [
         component:direction "Out"
         base:description "Sends processed payload data to the onboard computer."
     ]
 
-    instance TelemetrySignal : component:Signal []
-    instance CommandSignal : component:Signal []
-    instance ElectricalPower : component:Energy []
+    instance TelemetrySignal : component:Signal
+
+    instance CommandSignal : component:Signal
+
+    instance ElectricalPower : component:Energy
 
     relation instance Conn_EmergencyCommUnit_to_TransceiverCmd : component:Connection [
         from EmergencyCommUnit.Command_In
@@ -121,4 +166,21 @@ description <https://fireforce6.github.io/mission-control/system-analysis/connec
         component:transfers TelemetrySignal
     ]
 
+    relation instance Conn_FireSatCmd_to_Propulsion : component:Connection [
+        from FireSat.Command_In
+        to Propulsion.Command_In
+        component:transfers CommandSignal
+    ]
+
+    instance OBC.Data_In : component:Port [
+        component:portOf components:OBC
+        component:direction "In"
+        base:description "Receives processed payload data from the payload processor."
+    ]
+
+    relation instance Conn_PayloadProcessor_to_OBC : component:Connection [
+        from PayloadProcessor.Data_Out
+        to OBC.Data_In
+        component:transfers TelemetrySignal
+    ]
 }
